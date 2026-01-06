@@ -169,7 +169,7 @@ def test_operator_plugins(kopf_runner: KopfRunner) -> None:
 
     assert runner.exit_code == 0
     assert runner.exception is None
-    assert "Plugin 'noop' running." in runner.stdout
+    assert "Plugin 'noop' running." in runner.output
 
 
 @pytest.mark.timeout(180)
@@ -656,8 +656,8 @@ async def test_job(
             job_status = _get_job_status(k8s_cluster, ns)
             _assert_final_job_status(job, job_status, "Successful")
 
-    assert "A DaskJob has been created" in runner.stdout
-    assert "Job succeeded, deleting Dask cluster." in runner.stdout
+    assert "A DaskJob has been created" in runner.output
+    assert "Job succeeded, deleting Dask cluster." in runner.output
 
 
 @pytest.mark.anyio
@@ -718,8 +718,8 @@ async def test_failed_job(
             job_status = _get_job_status(k8s_cluster, ns)
             _assert_final_job_status(job, job_status, "Failed")
 
-    assert "A DaskJob has been created" in runner.stdout
-    assert "Job failed, deleting Dask cluster." in runner.stdout
+    assert "A DaskJob has been created" in runner.output
+    assert "Job failed, deleting Dask cluster." in runner.output
 
 
 @pytest.mark.anyio
