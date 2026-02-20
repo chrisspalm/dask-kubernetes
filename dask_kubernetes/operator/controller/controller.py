@@ -7,6 +7,7 @@ import time
 from collections import defaultdict
 from contextlib import suppress
 from datetime import datetime
+from importlib.metadata import entry_points
 from typing import TYPE_CHECKING, Any, Final
 from uuid import uuid4
 
@@ -14,7 +15,6 @@ import aiohttp
 import dask.config
 import kopf
 import kr8s
-from importlib.metadata import entry_points
 from distributed.core import clean_exception, rpc
 from distributed.protocol.pickle import dumps
 from kr8s.asyncio.objects import Deployment, Pod, Service
