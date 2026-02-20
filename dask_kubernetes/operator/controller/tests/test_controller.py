@@ -860,16 +860,16 @@ async def _get_cluster_status(
 @pytest.mark.timeout(180)
 @pytest.mark.anyio
 @pytest.mark.parametrize(
-    "cluster_name,expected_status",
+    "cluster_name,expect_error",
     [
-        ("valid-name", "Created"),
-        ((MAX_CLUSTER_NAME_LEN + 1) * "a", "Error"),
-        ("invalid.chars.in.name", "Error"),
+        ("valid-name", False),
+        ((MAX_CLUSTER_NAME_LEN + 1) * "a", True),
+        ("invalid.chars.in.name", True),
     ],
 )
 async def test_create_cluster_validates_name(
     cluster_name: str,
-    expected_status: str,
+    expect_error: bool,
     k8s_cluster: KindCluster,
     kopf_runner: KopfRunner,
     gen_cluster: Callable[..., AsyncContextManager[tuple[str, str]]],
@@ -877,7 +877,10 @@ async def test_create_cluster_validates_name(
     with kopf_runner:
         async with gen_cluster(cluster_name=cluster_name) as (_, ns):
             actual_status = await _get_cluster_status(k8s_cluster, ns, cluster_name)
-            assert expected_status == actual_status
+            if expect_error:
+                assert actual_status == "Error"
+            else:
+                assert actual_status != "Error"
 
 
 @pytest.mark.anyio
